@@ -1,0 +1,8 @@
+# Apache / cPanel hosting only (ignored by Vercel, Netlify, Cloudflare Pages).
+# Serve /contact and /contact/ straight from contact.html instead of redirecting
+# /contact -> /contact/, so URLs match the canonical links and sitemap.
+DirectorySlash Off
+ErrorDocument 404 /404.html
+RewriteEngine On
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.+?)/?$ /$1.html [L]
