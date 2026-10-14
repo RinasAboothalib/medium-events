@@ -1,0 +1,7 @@
+{
+  // Type-checks scripts/api-smoke.ts (run with tsx, not part of the build). export-seed.ts imports the
+  // website's source, which uses bundler-style imports, so it is left out.
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "rootDir": "." },
+  "include": ["scripts/api-smoke.ts"]
+}

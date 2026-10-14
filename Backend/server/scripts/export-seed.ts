@@ -1,10 +1,11 @@
-// One-off: copies the verified events, series and partners from the website's data into server/seed/,
-// so the admin starts with MEDIUM's real events. Run: npx tsx server/scripts/export-seed.ts
+// One-off: copies the verified events, series and partners from the website's data into Backend/server/seed/,
+// so the admin starts with MEDIUM's real events. Run: npx tsx Backend/server/scripts/export-seed.ts
 import { copyFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
-import { EVENT_SERIES, PAST_EVENTS_DATA } from '../../src/data/websiteData.ts';
+import { EVENT_SERIES, PAST_EVENTS_DATA } from '../../../Frontend/website/src/data/websiteData.ts';
 
-const root = join(import.meta.dirname, '..', '..');
+// Repository root
+const root = join(import.meta.dirname, '..', '..', '..');
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 // "24 – 27 Apr 2025" → 2025-04-27; single-day events have no end date
@@ -33,7 +34,7 @@ const series = EVENT_SERIES.map((s, i) => ({
 
 const editions = PAST_EVENTS_DATA.map((e) => {
   const image = basename(e.image);
-  copyFileSync(join(root, 'public', e.image), join(root, 'server', 'seed', 'images', image));
+  copyFileSync(join(root, 'Frontend', 'website', 'public', e.image), join(root, 'Backend', 'server', 'seed', 'images', image));
   return {
     series_slug: EVENT_SERIES.find((s) => s.series === e.series)!.slug,
     name: e.name,
@@ -47,5 +48,5 @@ const editions = PAST_EVENTS_DATA.map((e) => {
   };
 });
 
-writeFileSync(join(root, 'server', 'seed', 'events.json'), JSON.stringify({ series, editions }, null, 2) + '\n');
+writeFileSync(join(root, 'Backend', 'server', 'seed', 'events.json'), JSON.stringify({ series, editions }, null, 2) + '\n');
 console.log(`Wrote ${series.length} series and ${editions.length} editions`);

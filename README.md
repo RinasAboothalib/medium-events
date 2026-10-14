@@ -42,7 +42,8 @@ Pages are listed once in `Frontend/website/src/routes.ts`. Adding a page there a
 
 1. Copy `Frontend/website/.env.example` to `Frontend/website/.env` and fill in the values below.
 2. Run `npm --prefix Frontend/website run build`.
-3. Upload the contents of `dist/` to any static host (Vercel, Netlify, Cloudflare Pages, cPanel/Apache, etc.). Every page is a real HTML file, so no server is needed.
+3. **Netlify:** connect the GitHub repository and leave the build settings empty; `netlify.toml` builds from `Frontend/website` (so its packages, such as Vite, are installed), publishes `Frontend/website/dist` and uses Node 22. Add the `VITE_*` variables under Site configuration > Environment variables.
+4. Other hosts: upload the contents of `Frontend/website/dist/` to any static host (Vercel, Netlify, Cloudflare Pages, cPanel/Apache, etc.). Every page is a real HTML file, so no server is needed.
    - **Do not add a single-page-app rewrite** (e.g. "/* → /index.html"). Unknown addresses should get `404.html`, which Netlify, Vercel, Cloudflare Pages and GitHub Pages serve automatically.
    - **Apache / cPanel:** the included `.htaccess` serves `/contact` from `contact.html` instead of redirecting to `/contact/`, and serves `404.html` for unknown addresses. Make sure hidden files are uploaded and `mod_rewrite` is enabled. After launch, check that `https://medium.mv/contact` loads without a redirect.
 
@@ -120,7 +121,19 @@ Open http://localhost:3010 (or use **Staff login** in the website footer). The a
 
 ### Production
 
-Build both with `npm --prefix Backend/server run build` and `npm --prefix Frontend/admin run build`, then run `npm --prefix Backend/server start` with `NODE_ENV=production` on any Node 22 host (Render, Railway, Fly.io, a VPS). In production the server also serves the built admin app, so one address (e.g. `https://admin.medium.mv`) gives both the app and `/api`, and the session cookie is HTTPS-only. Set `DATABASE_URL` to Supabase there. On the website, set `VITE_ADMIN_URL` (footer Staff login link) and `VITE_ADMIN_API_URL` (published events and enquiries) to that address.
+The backend is one long-running Node 22 server (Render, Railway, Fly.io, a VPS); it doesn't run on static or serverless hosts such as Vercel or Netlify. It serves the API and the built admin app from one address (e.g. `https://admin.medium.mv`), so the admin always reaches `/api` on its own origin. Point the host at the repository root:
+
+| Setting | Value |
+|---|---|
+| Build command | `npm run build:backend` (installs and builds the admin app and the server) |
+| Start command | `npm start` |
+| Health check | `/api/health` |
+| `NODE_ENV` | `production` (the session cookie is then HTTPS-only, so use the host's HTTPS address) |
+| `DATABASE_URL` | Supabase Session pooler connection string. Without it data lives on the host's disk, which most hosts wipe on every deploy. For a Postgres without SSL, add `?sslmode=disable`. |
+| `PUBLIC_SITE_ORIGIN` | The website's address, e.g. `https://medium.mv, https://www.medium.mv` (comma-separated). Without it browsers block enquiries from the website. |
+| `DEFAULT_ADMIN_PASSWORD`, `SITE_DEPLOY_HOOK_URL` | Optional, as in `Backend/server/.env.example` |
+
+`PORT` is set by the host. If the database can't be reached the server stops with a message saying what to check. On the website, set `VITE_ADMIN_URL` (footer Staff login link) and `VITE_ADMIN_API_URL` (published events and enquiries) to the backend's address.
 
 | Command | What it does |
 |---|---|

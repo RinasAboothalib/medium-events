@@ -16,3 +16,5 @@ Backend/server/.env
 Backend/server/dist/
 Frontend/website/src/data/published.json
 Frontend/website/public/images/cms/
+# Vite dependency cache
+.vite/

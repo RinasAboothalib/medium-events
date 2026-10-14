@@ -1,0 +1,14 @@
+# Netlify hosts the public website only (Frontend/website). The admin app and API run together on a
+# Node host instead (see README, "Production").
+[build]
+  # Build from the website's own folder, so Netlify installs (and caches) its dependencies such as vite.
+  # Paths below are relative to this folder.
+  base = "Frontend/website"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Every page is pre-rendered to its own HTML file, and Netlify serves 404.html for unknown addresses,
+# so there is deliberately no "/* -> /index.html" rewrite.

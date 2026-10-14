@@ -5,12 +5,17 @@
     "dev": "npm --prefix Frontend/website run dev",
     "dev:admin": "npm --prefix Frontend/admin run dev",
     "dev:server": "npm --prefix Backend/server run dev",
-    "build": "npm --prefix Frontend/website run build",
+    "build": "npm --prefix Frontend/website install --include=dev && npm --prefix Frontend/website run build",
     "lint": "npm --prefix Frontend/website run lint",
     "test": "npm --prefix Frontend/website test",
-    "preview": "npm --prefix Frontend/website run preview"
+    "preview": "npm --prefix Frontend/website run preview",
+    "build:backend": "npm --prefix Frontend/admin ci --include=dev && npm --prefix Frontend/admin run build && npm --prefix Backend/server ci --include=dev && npm --prefix Backend/server run build",
+    "start": "npm --prefix Backend/server start"
   },
   "devDependencies": {
     "@types/node": "^26.6.5"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

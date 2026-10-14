@@ -29,7 +29,7 @@ export interface AppContext {
 }
 
 export interface AppConfig {
-  // Public website address allowed to call /api/public from the browser
+  // Public website address(es) allowed to call /api/public from the browser; a comma-separated list is fine
   publicSiteOrigin?: string;
   // Called (POST) after publishing so the host rebuilds the website
   deployHookUrl?: string;

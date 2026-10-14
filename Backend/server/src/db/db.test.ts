@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import request from 'supertest';
-import { openDb } from './index.js';
+import { openDb, pgConnection } from './index.js';
 import { migrate } from './migrate.js';
 import { createApp } from '../app.js';
 
@@ -46,5 +46,19 @@ describe('app', () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ ok: true });
     await db.close();
+  });
+});
+
+describe('DATABASE_URL connection settings', () => {
+  it('uses SSL without certificate checks for hosted databases, even when the URL says sslmode=require', () => {
+    expect(pgConnection('postgresql://postgres.ref:pw@aws-0-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require')).toEqual({
+      connectionString: 'postgresql://postgres.ref:pw@aws-0-ap-south-1.pooler.supabase.com:5432/postgres',
+      ssl: { rejectUnauthorized: false },
+    });
+  });
+
+  it('turns SSL off for a database on this machine or when the URL asks for it', () => {
+    expect(pgConnection('postgres://u:p@localhost:5432/db').ssl).toBe(false);
+    expect(pgConnection('postgres://u:p@internal-db:5432/db?sslmode=disable')).toEqual({ connectionString: 'postgres://u:p@internal-db:5432/db', ssl: false });
   });
 });

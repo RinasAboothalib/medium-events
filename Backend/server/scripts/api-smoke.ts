@@ -22,9 +22,14 @@ const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
 let failures = 0;
 let calls = 0;
 
+// Parsed JSON from the server. Typed loosely on purpose: each check below reads the fields it expects,
+// and a wrong shape fails that check at run time.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Json = any;
+
 interface Reply {
   status: number;
-  body: unknown;
+  body: Json;
   type: string;
   bytes: number;
 }
@@ -36,7 +41,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 // One signed-in person: keeps their session cookie between calls
 function client(name: string) {
   let cookie = '';
-  return async function call(method: string, path: string, expected: number, body?: unknown, raw?: { type: string; data: Uint8Array }): Promise<Reply> {
+  return async function call(method: string, path: string, expected: number, body?: unknown, raw?: { type: string; data: Uint8Array<ArrayBuffer> }): Promise<Reply> {
     const res = await fetch(base + path, {
       method,
       headers: { ...(cookie ? { cookie } : {}), ...(raw ? { 'content-type': raw.type } : body !== undefined ? { 'content-type': 'application/json' } : {}) },
