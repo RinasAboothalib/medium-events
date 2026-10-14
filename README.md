@@ -28,6 +28,8 @@ To start the staff admin app or API, use `npm run dev:admin` or `npm run dev:ser
 | `npm --prefix Frontend/website run lint` | TypeScript type check |
 | `npm --prefix Frontend/website run build` | Production build: pre-renders every page, writes `sitemap.xml` and `robots.txt`, then checks every page has its title, description, canonical link and share image |
 | `npm --prefix Frontend/website run preview` | Serves the production build from `dist/` |
+| `npm run build:website` | The same website build, run from the repository root |
+| `npm run build` | From the repository root: builds the backend (admin app and server) for deployment |
 
 Pages are listed once in `Frontend/website/src/routes.ts`. Adding a page there adds it to the router, the pre-rendered output, the sitemap and the build check.
 
@@ -125,7 +127,7 @@ The backend is one long-running Node 22 server (Render, Railway, Fly.io, a VPS);
 
 | Setting | Value |
 |---|---|
-| Build command | `npm run build:backend` (installs and builds the admin app and the server) |
+| Build command | `npm run build` (from the repository root, this installs and builds the admin app and the server; the website is built with `npm run build:website`) |
 | Start command | `npm start` |
 | Health check | `/api/health` |
 | `NODE_ENV` | `production` (the session cookie is then HTTPS-only, so use the host's HTTPS address) |

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.build.json",
+    "prestart": "node -e \"require('node:fs').existsSync('dist/index.js') || (console.error('The server is not built (Backend/server/dist is missing). Build it first: npm run build (from the repository root). On Railway, the build command must be npm run build.'), process.exit(1))\"",
     "start": "node dist/index.js",
     "lint": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
     "test": "vitest run",

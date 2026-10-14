@@ -55,7 +55,7 @@ const port = Number(process.env.PORT ?? 3020);
 const adminDist = join(root, '..', '..', 'Frontend', 'admin', 'dist');
 const serveAdmin = production && existsSync(join(adminDist, 'index.html'));
 if (production && !serveAdmin) {
-  console.warn(`WARNING: the admin app isn't built (${adminDist} is missing), so only /api is served. Build it with: npm run build:backend (from the repository root).`);
+  console.warn(`WARNING: the admin app isn't built (${adminDist} is missing), so only /api is served. Build it with: npm run build (from the repository root).`);
 }
 
 // The website that may send enquiries from the browser. In development the website's own dev server

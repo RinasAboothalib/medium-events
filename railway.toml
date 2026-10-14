@@ -1,8 +1,8 @@
 # Railway runs the backend: the API plus the admin app it serves (Backend/server, Frontend/admin).
 # The public website is hosted on Netlify (netlify.toml).
 [build]
-  # The root "build" script builds the public website; the backend needs its own build
-  buildCommand = "npm run build:backend"
+  # Builds the admin app and the server (same as the root "build" script, Railway's default)
+  buildCommand = "npm run build"
 
 [deploy]
   startCommand = "npm start"
