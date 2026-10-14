@@ -129,9 +129,11 @@ The backend is one long-running Node 22 server (Render, Railway, Fly.io, a VPS);
 | Start command | `npm start` |
 | Health check | `/api/health` |
 | `NODE_ENV` | `production` (the session cookie is then HTTPS-only, so use the host's HTTPS address) |
-| `DATABASE_URL` | Supabase Session pooler connection string. Without it data lives on the host's disk, which most hosts wipe on every deploy. For a Postgres without SSL, add `?sslmode=disable`. |
+| `DATABASE_URL` | Supabase Session pooler connection string. Without it data lives on the host's disk, which most hosts wipe on every deploy. SSL is used automatically, except on the host's private network (e.g. `*.railway.internal`); add `?sslmode=disable` or `?sslmode=require` to override. |
 | `PUBLIC_SITE_ORIGIN` | The website's address, e.g. `https://medium.mv, https://www.medium.mv` (comma-separated). Without it browsers block enquiries from the website. |
 | `DEFAULT_ADMIN_PASSWORD`, `SITE_DEPLOY_HOOK_URL` | Optional, as in `Backend/server/.env.example` |
+
+**Railway:** `railway.toml` sets the build command, start command and health check, so create a service from the GitHub repository and only add the variables. For the database, add Railway's PostgreSQL and set `DATABASE_URL` to `${{Postgres.DATABASE_URL}}` (its private address works without SSL, which the server detects), or use Supabase. Generate a domain under Settings > Networking.
 
 `PORT` is set by the host. If the database can't be reached the server stops with a message saying what to check. On the website, set `VITE_ADMIN_URL` (footer Staff login link) and `VITE_ADMIN_API_URL` (published events and enquiries) to the backend's address.
 

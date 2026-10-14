@@ -40,8 +40,9 @@ async function openPglite(dataDir: string): Promise<Db> {
 
 // Connection settings for a DATABASE_URL. Hosted Postgres (Supabase and most others) needs SSL, but its
 // certificate chain isn't in Node's trust store, so the connection is encrypted without verifying it.
-// SSL is off for a database on this machine, or when the URL (or PGSSLMODE) says sslmode=disable,
-// e.g. a host's internal Postgres that doesn't offer SSL.
+// SSL is off for a database on this machine or on the host's private network (Railway's *.railway.internal,
+// Render's dotless internal names), which don't offer it, or when the URL (or PGSSLMODE) says sslmode=disable.
+// sslmode=require turns it back on for any of these.
 // sslmode is removed from the URL because node-postgres would otherwise override these settings
 // (it reads sslmode=require as "verify the certificate", which fails against Supabase).
 export function pgConnection(url: string): { connectionString: string; ssl: false | { rejectUnauthorized: false } } {
@@ -54,8 +55,9 @@ export function pgConnection(url: string): { connectionString: string; ssl: fals
   }
   const mode = (parsed.searchParams.get('sslmode') ?? process.env.PGSSLMODE ?? '').toLowerCase();
   for (const key of ['sslmode', 'sslrootcert', 'sslcert', 'sslkey', 'uselibpqcompat']) parsed.searchParams.delete(key);
-  const local = ['localhost', '127.0.0.1', '[::1]'].includes(parsed.hostname);
-  const ssl = mode === 'disable' || (local && !mode) ? false : { rejectUnauthorized: false as const };
+  const host = parsed.hostname;
+  const privateHost = ['localhost', '127.0.0.1', '[::1]'].includes(host) || !host.includes('.') || host.endsWith('.internal');
+  const ssl = mode === 'disable' || (privateHost && !mode) ? false : { rejectUnauthorized: false as const };
   return { connectionString: parsed.toString(), ssl };
 }
 

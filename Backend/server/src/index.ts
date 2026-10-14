@@ -35,7 +35,7 @@ try {
     console.error(
       'Check DATABASE_URL: for Supabase use the Session pooler connection string (port 5432, user postgres.<project-ref>) with your database password; ' +
         'the direct db.<ref>.supabase.co address only works over IPv6, which many hosts lack. ' +
-        'For a database without SSL, add ?sslmode=disable to the URL.',
+        'If the error mentions SSL, add ?sslmode=disable (or ?sslmode=require) to the URL.',
     );
   }
   process.exit(1);

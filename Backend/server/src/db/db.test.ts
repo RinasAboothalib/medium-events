@@ -57,8 +57,11 @@ describe('DATABASE_URL connection settings', () => {
     });
   });
 
-  it('turns SSL off for a database on this machine or when the URL asks for it', () => {
+  it("turns SSL off for a database on this machine, on the host's private network, or when the URL asks for it", () => {
     expect(pgConnection('postgres://u:p@localhost:5432/db').ssl).toBe(false);
+    expect(pgConnection('postgresql://postgres:pw@postgres.railway.internal:5432/railway').ssl).toBe(false);
+    expect(pgConnection('postgres://u:p@dpg-abc123-a:5432/db').ssl).toBe(false);
+    expect(pgConnection('postgresql://postgres:pw@postgres.railway.internal:5432/railway?sslmode=require').ssl).toEqual({ rejectUnauthorized: false });
     expect(pgConnection('postgres://u:p@internal-db:5432/db?sslmode=disable')).toEqual({ connectionString: 'postgres://u:p@internal-db:5432/db', ssl: false });
   });
 });

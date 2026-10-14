@@ -1,0 +1,13 @@
+# Railway runs the backend: the API plus the admin app it serves (Backend/server, Frontend/admin).
+# The public website is hosted on Netlify (netlify.toml).
+[build]
+  # The root "build" script builds the public website; the backend needs its own build
+  buildCommand = "npm run build:backend"
+
+[deploy]
+  startCommand = "npm start"
+  healthcheckPath = "/api/health"
+  # First start-up runs the database migrations and loads the seed events
+  healthcheckTimeout = 300
+  restartPolicyType = "ON_FAILURE"
+  restartPolicyMaxRetries = 5
