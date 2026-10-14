@@ -24,9 +24,13 @@ let calls = 0;
 
 interface Reply {
   status: number;
-  body: any;
+  body: unknown;
   type: string;
   bytes: number;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 // One signed-in person: keeps their session cookie between calls
@@ -42,11 +46,12 @@ function client(name: string) {
     if (set) cookie = set.split(';')[0];
     const type = res.headers.get('content-type') ?? '';
     const buffer = Buffer.from(await res.arrayBuffer());
-    const parsed = type.includes('json') && buffer.length ? JSON.parse(buffer.toString()) : null;
+    const parsed: unknown = type.includes('json') && buffer.length ? JSON.parse(buffer.toString()) : null;
+    const errorBody = isRecord(parsed) ? parsed : undefined;
     const ok = res.status === expected;
     calls += 1;
     if (!ok) failures += 1;
-    const detail = ok ? '' : `  <-- expected ${expected}${parsed?.error ? `: ${parsed.error} ${JSON.stringify(parsed.fields ?? '')}` : ''}`;
+    const detail = ok ? '' : `  <-- expected ${expected}${errorBody?.error ? `: ${errorBody.error} ${JSON.stringify(errorBody.fields ?? '')}` : ''}`;
     console.log(`${ok ? 'ok  ' : 'FAIL'} ${String(res.status).padEnd(4)} ${name.padEnd(8)} ${method.padEnd(6)} ${path}${detail}`);
     return { status: res.status, body: parsed, type, bytes: buffer.length };
   };
