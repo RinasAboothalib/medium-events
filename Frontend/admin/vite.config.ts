@@ -8,7 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Shared code from the public site (palette); keeps both apps visually identical
-      '@site': fileURLToPath(new URL('../src', import.meta.url)),
+      '@site': fileURLToPath(new URL('../website/src', import.meta.url)),
     },
   },
   server: {

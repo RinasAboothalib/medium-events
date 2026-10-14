@@ -35,7 +35,7 @@ export interface AppConfig {
   deployHookUrl?: string;
 }
 
-// adminDist: folder of the built admin app (admin/dist) to serve in production, from the same origin as /api
+// adminDist: folder of the built admin app (Frontend/admin/dist) to serve in production, from the same origin as /api
 export function createApp(opts: { db: Db; now?: () => Date; fetch?: typeof fetch; config?: AppConfig; adminDist?: string }) {
   const ctx: AppContext = { db: opts.db, now: opts.now ?? (() => new Date()), fetch: opts.fetch ?? fetch, config: opts.config ?? {} };
   const app = express();

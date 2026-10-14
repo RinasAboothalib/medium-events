@@ -1,4 +1,4 @@
-import { can as serverCan, type Permission } from '../../../server/src/permissions.ts';
+import { can as serverCan, type Permission } from '../../../../Backend/server/src/permissions.ts';
 import type { StaffRole } from './types';
 
 // Which sections each role sees. Uses the server's own permission table, so the menu always

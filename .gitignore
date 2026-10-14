@@ -10,9 +10,9 @@ dist-ssr/
 .superpowers/
 supabase/.env.local
 supabase/.temp/
-admin/dist/
-server/.data/
-server/.env
-server/dist/
-src/data/published.json
-public/images/cms/
+Frontend/admin/dist/
+Backend/server/.data/
+Backend/server/.env
+Backend/server/dist/
+Frontend/website/src/data/published.json
+Frontend/website/public/images/cms/

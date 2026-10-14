@@ -28,8 +28,8 @@ if (await defaultAdminPending(db)) {
 }
 
 const port = Number(process.env.PORT ?? 3020);
-// In production the server also serves the built admin app (npm --prefix admin run build)
-const adminDist = join(root, '..', 'admin', 'dist');
+// In production the server also serves the built admin app (npm --prefix Frontend/admin run build)
+const adminDist = join(root, '..', '..', 'Frontend', 'admin', 'dist');
 
 createApp({
   db,

@@ -1,5 +1,5 @@
 // One small interface over two Postgres engines:
-//  - PGlite (embedded Postgres) for local development and tests: no setup, data in server/.data
+//  - PGlite (embedded Postgres) for local development and tests: no setup, data in Backend/server/.data
 //  - node-postgres for Supabase (or any Postgres) when DATABASE_URL is set
 import { PGlite } from '@electric-sql/pglite';
 import pg from 'pg';
