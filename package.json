@@ -9,5 +9,8 @@
     "lint": "npm --prefix Frontend/website run lint",
     "test": "npm --prefix Frontend/website test",
     "preview": "npm --prefix Frontend/website run preview"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5"
   }
 }
