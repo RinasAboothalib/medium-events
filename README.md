@@ -11,10 +11,13 @@ Website for MEDIUM Events Pvt Ltd (Malé, Maldives), built with React, Vite and 
 
 ## Run locally
 
+From the project root, start the public website with:
+
 ```bash
-npm --prefix Frontend/website install
-npm --prefix Frontend/website run dev
+npm run dev
 ```
+
+To start the staff admin app or API, use `npm run dev:admin` or `npm run dev:server` in separate terminals.
 
 ## Scripts
 
